@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getTodayDate, archiveData } from '../utils/dateUtils';
 
 const AppContext = createContext();
@@ -55,6 +55,40 @@ const INITIAL_STATE = {
   friends: {} // Store friend data here
 };
 
+// Helper function to reset personal category tasks
+const resetPersonalCategory = (tasks) => {
+  return tasks
+    .filter(task => task.isPermanent) // Keep only permanent tasks
+    .map(task => ({ ...task, checked: false })); // Uncheck all
+};
+
+// Helper function to reset for a new day
+const resetForNewDay = (prevState) => {
+  // Archive yesterday's data
+  const archived = archiveData(prevState);
+
+  // Reset checkboxes and remove daily tasks
+  return {
+    ...prevState,
+    work: {
+      defaultTasks: prevState.work.defaultTasks.map(t => ({ ...t, checked: false })),
+      dailyTasks: [] // Clear daily tasks
+    },
+    personal: {
+      mentalGrowth: resetPersonalCategory(prevState.personal.mentalGrowth),
+      physicalGrowth: resetPersonalCategory(prevState.personal.physicalGrowth),
+      socialGrowth: resetPersonalCategory(prevState.personal.socialGrowth),
+      personalGrowth: resetPersonalCategory(prevState.personal.personalGrowth),
+      tryingNewThings: resetPersonalCategory(prevState.personal.tryingNewThings)
+    },
+    archive: {
+      ...prevState.archive,
+      [prevState.lastResetDate]: archived
+    },
+    lastResetDate: getTodayDate()
+  };
+};
+
 export const AppProvider = ({ children }) => {
   const [state, setState] = useState(() => {
     const saved = localStorage.getItem('growthTrackerData');
@@ -73,38 +107,6 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('growthTrackerData', JSON.stringify(state));
   }, [state]);
-
-  const resetPersonalCategory = useCallback((tasks) => {
-    return tasks
-      .filter(task => task.isPermanent) // Keep only permanent tasks
-      .map(task => ({ ...task, checked: false })); // Uncheck all
-  }, []);
-
-  const resetForNewDay = useCallback((prevState) => {
-    // Archive yesterday's data
-    const archived = archiveData(prevState);
-
-    // Reset checkboxes and remove daily tasks
-    return {
-      ...prevState,
-      work: {
-        defaultTasks: prevState.work.defaultTasks.map(t => ({ ...t, checked: false })),
-        dailyTasks: [] // Clear daily tasks
-      },
-      personal: {
-        mentalGrowth: resetPersonalCategory(prevState.personal.mentalGrowth),
-        physicalGrowth: resetPersonalCategory(prevState.personal.physicalGrowth),
-        socialGrowth: resetPersonalCategory(prevState.personal.socialGrowth),
-        personalGrowth: resetPersonalCategory(prevState.personal.personalGrowth),
-        tryingNewThings: resetPersonalCategory(prevState.personal.tryingNewThings)
-      },
-      archive: {
-        ...prevState.archive,
-        [prevState.lastResetDate]: archived
-      },
-      lastResetDate: getTodayDate()
-    };
-  }, [resetPersonalCategory]);
 
   // Check for midnight reset every minute
   useEffect(() => {
