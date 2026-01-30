@@ -27,6 +27,27 @@ function App() {
     });
   };
 
+const getGreeting = (date) => {
+  const hour = date.getHours();
+
+  //early 
+  if (hour<12){
+    return "☀️ Good morning, Charlie ☀️"
+  }
+  else if (hour>=12 && hour < 17){
+    return "⏰ Good afternoon, Charlie⏰"
+  }
+  else if (hour >= 17 && hour < 22){
+    return "🌚 Good evening, Charlie 🌚"
+ } else if (hour >= 22 || hour < 3) {   // 10pm to 2:59am
+    return "Go to bed, Charlie";
+  } else {
+    return "Hello, Charlie";  // fallback for 3am-11:59am gap
+  }
+};
+
+
+
   const renderActiveTab = () => {
     if (showArchive) {
       return <ArchiveViewer onClose={() => setShowArchive(false)} />;
@@ -48,7 +69,7 @@ function App() {
       <div className="app">
         <header className="app-header">
           <div className="header-left">
-            <h1>Task Tracker</h1>
+            <h1>{getGreeting(currentTime)}</h1>
             <span className="current-time">{formatTime(currentTime)}</span>
           </div>
           <button className="archive-btn" onClick={() => setShowArchive(!showArchive)}>

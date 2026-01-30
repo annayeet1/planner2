@@ -9,7 +9,7 @@ const PersonalTab = () => {
     {
       key: 'mentalGrowth',
       title: 'Mental Growth',
-      description: 'Learning, reading, meditation',
+      description: 'Learning, reading, exploring',
       color: 'mental',
       icon: '🧠'
     },
@@ -39,7 +39,7 @@ const PersonalTab = () => {
       title: 'Trying New Things',
       description: 'Challenges, new experiences',
       color: 'new',
-      icon: '✨'
+      icon: '🏔️'
     }
   ];
 
