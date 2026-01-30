@@ -69,8 +69,11 @@ const getGreeting = (date) => {
       <div className="app">
         <header className="app-header">
           <div className="header-left">
-            <h1>{getGreeting(currentTime)}</h1>
+            <h1>Task Tracker</h1>
             <span className="current-time">{formatTime(currentTime)}</span>
+          </div>
+          <div className="header-center">
+            <h1>{getGreeting(currentTime)}</h1>
           </div>
           <button className="archive-btn" onClick={() => setShowArchive(!showArchive)}>
             {showArchive ? 'Close Archive' : 'View Archive'}
