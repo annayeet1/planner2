@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import GrowthCard from '../Cards/GrowthCard';
 
 const FriendTab = () => {
   const { state, friends } = useApp();

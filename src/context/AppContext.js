@@ -118,7 +118,7 @@ export const AppProvider = ({ children }) => {
     }, 60000); // Check every minute
 
     return () => clearInterval(checkMidnight);
-  }, [state.lastResetDate, resetForNewDay]);
+  }, [state.lastResetDate]);
 
   // Work functions
   const toggleWorkTask = (taskId, isDaily) => {
