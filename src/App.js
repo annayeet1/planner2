@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { AppProvider } from './context/AppContext';
 import WorkTab from './components/Tabs/WorkTab';
 import PersonalTab from './components/Tabs/PersonalTab';
-import FriendTab from './components/Tabs/FriendTab';
 import ArchiveViewer from './components/Archive/ArchiveViewer';
 import './App.css';
 
@@ -38,8 +37,6 @@ function App() {
         return <WorkTab />;
       case 'personal':
         return <PersonalTab />;
-      case 'friends':
-        return <FriendTab />;
       default:
         return <PersonalTab />;
     }
@@ -71,12 +68,6 @@ function App() {
             onClick={() => setActiveTab('personal')}
           >
             Personal
-          </button>
-          <button
-            className={`tab-btn ${activeTab === 'friends' ? 'active' : ''}`}
-            onClick={() => setActiveTab('friends')}
-          >
-            Friends
           </button>
         </nav>
 

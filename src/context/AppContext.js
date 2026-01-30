@@ -42,8 +42,7 @@ const DEFAULT_PERSONAL_TASKS = {
 const INITIAL_STATE = {
   user: {
     id: 'user1',
-    name: 'You',
-    friends: []
+    name: 'You'
   },
   work: {
     defaultTasks: DEFAULT_WORK_TASKS,
@@ -51,14 +50,13 @@ const INITIAL_STATE = {
   },
   personal: DEFAULT_PERSONAL_TASKS,
   archive: {},
-  lastResetDate: getTodayDate(),
-  friends: {} // Store friend data here
+  lastResetDate: getTodayDate()
 };
 
 // Helper function to reset personal category tasks
 const resetPersonalCategory = (tasks) => {
   return tasks
-    .filter(task => task.isPermanent) // Keep only permanent tasks
+    .filter(task => task.isPermanent || !task.checked) // Keep recurring tasks OR unchecked one-time tasks
     .map(task => ({ ...task, checked: false })); // Uncheck all
 };
 
@@ -201,35 +199,6 @@ export const AppProvider = ({ children }) => {
     }));
   };
 
-  // Friend functions
-  const addFriend = (friendId, friendName) => {
-    setState(prev => ({
-      ...prev,
-      user: {
-        ...prev.user,
-        friends: [...prev.user.friends, friendId]
-      },
-      friends: {
-        ...prev.friends,
-        [friendId]: {
-          id: friendId,
-          name: friendName,
-          personal: DEFAULT_PERSONAL_TASKS // Initialize with default tasks
-        }
-      }
-    }));
-  };
-
-  const removeFriend = (friendId) => {
-    setState(prev => ({
-      ...prev,
-      user: {
-        ...prev.user,
-        friends: prev.user.friends.filter(id => id !== friendId)
-      }
-    }));
-  };
-
   const value = {
     state,
     work: {
@@ -241,10 +210,6 @@ export const AppProvider = ({ children }) => {
       toggle: togglePersonalTask,
       add: addPersonalTask,
       delete: deletePersonalTask
-    },
-    friends: {
-      add: addFriend,
-      remove: removeFriend
     }
   };
 
